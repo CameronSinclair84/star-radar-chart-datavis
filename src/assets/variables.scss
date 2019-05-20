@@ -1,0 +1,68 @@
+//variables
+$primary-color-1: #37234f;
+$primary-color-2: #003864;
+$primary-color-3: #b02062;
+$primary-color-4: #65449b;
+$primary-color-5: #6ecbd3;
+$primary-text-color: #ffffff;
+$secondary-text-color: #000000;
+$base-padding: 15px;
+$base-margin: 15px;
+$border-radius: 15px;
+$border-radius-weight: 2px;
+$border-radius-button: 25px;
+$font-headings: "nunito", sans-serif;
+
+//inheritance
+%heading {
+  letter-spacing: 6px;
+  size: 1rem;
+  color: $primary-text-color;
+  font-family: $font-headings;
+}
+
+//global
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 12pt;
+  font-family: "arial";
+}
+
+label {
+  margin-bottom: $base-margin/3;
+}
+
+//animations
+@keyframes active-focus-light {
+  0% {
+    border: $primary-color-4 solid 1pt;
+    box-shadow: 0px 0px 6px 3px $primary-color-5;
+  }
+  50% {
+    border: $primary-color-5 solid 1pt;
+    box-shadow: 0px 0px 20px 10px $primary-color-4;
+  }
+  100% {
+    border: $primary-color-4 solid 1pt;
+    box-shadow: 0px 0px 6px 3px $primary-color-5;
+  }
+}
+
+//inheritance
+%focus-light {
+  border: solid 1pt transparent;
+  // &:hover {
+  //   border: $primary-color-5 solid 1pt;
+  //   box-shadow: 0px 0px 6px 3px $primary-color-5;
+  //   transition-duration: 0.1s;
+  // }
+  &:hover {
+    border: $primary-color-5 solid 1pt;
+    box-shadow: 0px 0px 6px 3px $primary-color-5;
+    animation-name: active-focus-light;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+}

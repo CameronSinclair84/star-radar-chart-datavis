@@ -1,0 +1,31 @@
+@import "../assets/variables.scss";
+
+.starSide {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: $base-padding * 2;
+  height: 300px;
+  width: 500px;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .starSide {
+    margin-top: $base-padding * 3;
+    width: 500px;
+    height: 400px;
+    min-height: 50%;
+    min-width: 50%;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .starSide {
+    margin-top: $base-padding;
+    width: 600px;
+    height: 500px;
+  }
+}

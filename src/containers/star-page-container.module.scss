@@ -1,0 +1,68 @@
+@import "../assets/variables.scss";
+
+body {
+  font-family: arial;
+  font-size: 12pt;
+  color: white;
+  background-image: url("../assets/background.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100vw;
+  max-height: 100vh;
+  min-width: 100%;
+}
+
+.pageText {
+  display: none;
+  padding: 20px 20px 0px 0px;
+}
+
+.sliderBars {
+  text-align: left;
+}
+
+.slider {
+  margin-top: 15px;
+  width: 80%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 7px;
+  background: #d3d3d3;
+  border-radius: 25px;
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+button {
+  margin-top: 10px;
+  height: 40px;
+  width: 150px;
+  border-color: $primary-color-5;
+  color: $primary-text-color;
+  background-color: transparent;
+  border-radius: $border-radius-button;
+  border-width: $border-radius-weight;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-color-5;
+    color: white;
+  }
+
+  @extend %focus-light;
+}
+
+@media only screen and (min-width: 768px) {
+  .pageText {
+    display: unset;
+    width: 30%;
+  }
+}

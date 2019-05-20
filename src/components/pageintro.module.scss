@@ -1,0 +1,25 @@
+@import "../assets/variables.scss";
+
+.intro {
+  padding: $base-padding;
+  text-align: right;
+}
+.heading {
+  @extend %heading;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: $base-padding;
+}
+.text {
+  text-align: justify;
+
+  @extend %heading;
+  letter-spacing: 0;
+}
+
+@media only screen and (min-width: 1080px) {
+  .intro {
+    float: right;
+    text-align: right;
+  }
+}
