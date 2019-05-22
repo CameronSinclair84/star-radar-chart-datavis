@@ -96,43 +96,6 @@ class StarContainer extends React.Component<IProps, IState> {
       });
   };
 
-  public updateStar = (event: React.MouseEvent) => {
-    this.starLabel = [];
-    for (let i = 0; i < this.numberOfDatasets; i++) {
-      const tempDataSet: number[] = [];
-      const randomID = Math.floor(
-        Math.random() * this.dataRetrievedFromDB.length
-      );
-      this.dataRetrievedFromDB[randomID].categoryResults.map((element: any) => {
-        tempDataSet.push(element.categoryAverage);
-      });
-      this.starData[i] = {
-        label: "Star " + (i + 1),
-        data: this.buildFakeDataArray(tempDataSet),
-        backgroundColor: "rgba(101, 68, 155, 0.6)",
-        borderColor: "rgba(110, 203, 211, 0.8)",
-        pointRadius: this.buildPointSizeArray(),
-        lineTension: this.sharpness,
-        borderWidth: 1
-      };
-      this.starLabel[i] =
-        this.dataRetrievedFromDB[randomID].user.displayName +
-        " - " +
-        this.dataRetrievedFromDB[randomID].date
-          .toDate()
-          .toString()
-          .slice(0, 25);
-    }
-
-    this.setState({
-      ourData: {
-        ...this.state.ourData,
-        labels: this.categoryLabelsFromDB,
-        datasets: [...this.starData]
-      }
-    });
-  };
-
   public render() {
     return (
       <React.Fragment>
@@ -158,7 +121,7 @@ class StarContainer extends React.Component<IProps, IState> {
                   max="6"
                   value={this.sharpness * 10}
                   className={styles.slider}
-                  onChange={() => this.handleEvent(window.event, 1)}
+                  onChange={() => this.handleSliderEvent(window.event, 1)}
                 />
                 <br />
                 <br />
@@ -170,12 +133,21 @@ class StarContainer extends React.Component<IProps, IState> {
                   max="10"
                   value={this.divider * 10 - 10}
                   className={styles.slider}
-                  onChange={() => this.handleEvent(window.event, 2)}
+                  onChange={() => this.handleSliderEvent(window.event, 2)}
                 />
               </div>
               <br />
-              Showing Star Data for:
+              <button onClick={this.handleAddDataset}>Add dataset</button>
               <br />
+              <button onClick={this.handleRemoveDataset}>Remove dataset</button>
+              <br />
+              <button onClick={this.getNewDataForStars}>
+                Get new random data
+              </button>
+              <br />
+              <div className={styles.showingStarData}>
+                Showing Star Data for:
+              </div>
               {this.starLabel.map((eachLabel, index) => (
                 <span>
                   {"Star " + (index + 1) + " - "}
@@ -183,13 +155,6 @@ class StarContainer extends React.Component<IProps, IState> {
                   <br />
                 </span>
               ))}
-              <br />
-              <button onClick={this.updateStar}>Get new data</button>
-              <br />
-              <br />
-              <div onClick={this.handleAddDataset}>Add dataset</div>
-              <br />
-              <div onClick={this.handleRemoveDataset}>Remove dataset</div>
             </PageIntro>
           </div>
         </div>
@@ -198,19 +163,18 @@ class StarContainer extends React.Component<IProps, IState> {
   }
 
   public handleRemoveDataset = () => {
-    if (this.numberOfDatasets <= 0) {
-      return;
+    if (this.numberOfDatasets > 0) {
+      this.numberOfDatasets--;
+      this.starLabel.pop();
+      this.starData.pop();
+      this.setState({
+        ourData: {
+          ...this.state.ourData,
+          labels: this.categoryLabelsFromDB,
+          datasets: [...this.starData]
+        }
+      });
     }
-    this.numberOfDatasets--;
-    this.starLabel.pop();
-    this.starData.pop();
-    this.setState({
-      ourData: {
-        ...this.state.ourData,
-        labels: this.categoryLabelsFromDB,
-        datasets: [...this.starData]
-      }
-    });
   };
 
   public handleAddDataset = () => {
@@ -252,7 +216,7 @@ class StarContainer extends React.Component<IProps, IState> {
     });
   };
 
-  public handleEvent = (event: any, val: number) => {
+  public handleSliderEvent = (event: any, val: number) => {
     switch (val) {
       case 1:
         this.sharpness = event.target.value / 10;
@@ -295,6 +259,43 @@ class StarContainer extends React.Component<IProps, IState> {
       default:
         break;
     }
+  };
+
+  public getNewDataForStars = (event: React.MouseEvent) => {
+    this.starLabel = [];
+    for (let i = 0; i < this.numberOfDatasets; i++) {
+      const tempDataSet: number[] = [];
+      const randomID = Math.floor(
+        Math.random() * this.dataRetrievedFromDB.length
+      );
+      this.dataRetrievedFromDB[randomID].categoryResults.map((element: any) => {
+        tempDataSet.push(element.categoryAverage);
+      });
+      this.starData[i] = {
+        label: "Star " + (i + 1),
+        data: this.buildFakeDataArray(tempDataSet),
+        backgroundColor: "rgba(101, 68, 155, 0.6)",
+        borderColor: "rgba(110, 203, 211, 0.8)",
+        pointRadius: this.buildPointSizeArray(),
+        lineTension: this.sharpness,
+        borderWidth: 1
+      };
+      this.starLabel[i] =
+        this.dataRetrievedFromDB[randomID].user.displayName +
+        " - " +
+        this.dataRetrievedFromDB[randomID].date
+          .toDate()
+          .toString()
+          .slice(0, 25);
+    }
+
+    this.setState({
+      ourData: {
+        ...this.state.ourData,
+        labels: this.categoryLabelsFromDB,
+        datasets: [...this.starData]
+      }
+    });
   };
 
   // Random rgba colour generator
