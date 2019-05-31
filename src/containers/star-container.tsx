@@ -5,6 +5,7 @@ import Star from "../components/star";
 import { firestore } from "../firebase";
 import styles from "./star-page-container.module.scss";
 import { IStarData } from "../utilities";
+import { array } from "prop-types";
 
 export interface IProps {}
 export interface IState {
@@ -49,9 +50,7 @@ class StarContainer extends React.Component<IProps, IState> {
       .collection("questionnaires")
       .get()
       .then(querySnapshot => {
-        this.dataRetrievedFromDB = querySnapshot.docs.map(document =>
-          document.data()
-        );
+        this.dataRetrievedFromDB = querySnapshot.docs.map(document => document.data());
 
         // Mapping data from database to our variables - C.S.
         // Inserting empty string between each label for purpose of fake data points - C.S.
@@ -104,12 +103,11 @@ class StarContainer extends React.Component<IProps, IState> {
 
           <div className={styles.pageText}>
             <PageIntro heading="WELCOME TO YOUR PERSONAL STAR">
-              The power of the star is in its visual representation of how you
-              scored each area of your life. The key is not to focus on the
-              elements with lower score but to think what would I like to
-              improve. Always be thinking where am I now and where would I like
-              to be in a month year etc. Let you aims goals and desires drive
-              the tasks you set for yourself.
+              The power of the star is in its visual representation of how you scored each area of
+              your life. The key is not to focus on the elements with lower score but to think what
+              would I like to improve. Always be thinking where am I now and where would I like to
+              be in a month year etc. Let you aims goals and desires drive the tasks you set for
+              yourself.
               <br />
               <br />
               <div className={styles.sliderBars}>
@@ -141,13 +139,9 @@ class StarContainer extends React.Component<IProps, IState> {
               <br />
               <button onClick={this.handleRemoveDataset}>Remove dataset</button>
               <br />
-              <button onClick={this.getNewDataForStars}>
-                Get new random data
-              </button>
+              <button onClick={this.getNewDataForStars}>Get new random data</button>
               <br />
-              <div className={styles.showingStarData}>
-                Showing Star Data for:
-              </div>
+              <div className={styles.showingStarData}>Showing Star Data for:</div>
               {this.starLabel.map((eachLabel, index) => (
                 <span>
                   {"Star " + (index + 1) + " - "}
@@ -177,15 +171,25 @@ class StarContainer extends React.Component<IProps, IState> {
     }
   };
 
+  public checkForEmptyDataset = (arrayToTest: number[]): boolean => {
+    return arrayToTest.reduce((a, b) => a + b, 0) === 0;
+  };
+
   public handleAddDataset = () => {
     this.numberOfDatasets++;
-    const tempDataSet: number[] = [];
-    const randomID = Math.floor(
-      Math.random() * this.dataRetrievedFromDB.length
-    );
-    this.dataRetrievedFromDB[randomID].categoryResults.map((element: any) => {
-      tempDataSet.push(element.categoryAverage);
-    });
+    let satisfactoryDataset: boolean = false;
+    let tempDataSet: number[] = [];
+    let randomID: number = 0;
+    while (!satisfactoryDataset) {
+      tempDataSet = [];
+      randomID = Math.floor(Math.random() * this.dataRetrievedFromDB.length);
+      this.dataRetrievedFromDB[randomID].categoryResults.map((element: any) => {
+        tempDataSet.push(element.categoryAverage);
+      });
+      if (!this.checkForEmptyDataset(tempDataSet)) {
+        satisfactoryDataset = true;
+      }
+    }
     this.starData.push({
       label: "Star " + this.numberOfDatasets,
       data: this.buildFakeDataArray(tempDataSet),
@@ -265,9 +269,7 @@ class StarContainer extends React.Component<IProps, IState> {
     this.starLabel = [];
     for (let i = 0; i < this.numberOfDatasets; i++) {
       const tempDataSet: number[] = [];
-      const randomID = Math.floor(
-        Math.random() * this.dataRetrievedFromDB.length
-      );
+      const randomID = Math.floor(Math.random() * this.dataRetrievedFromDB.length);
       this.dataRetrievedFromDB[randomID].categoryResults.map((element: any) => {
         tempDataSet.push(element.categoryAverage);
       });
@@ -304,17 +306,7 @@ class StarContainer extends React.Component<IProps, IState> {
     const o = Math.round;
     const r = Math.random;
     const s = 255;
-    return (
-      "rgba(" +
-      o(r() * s) +
-      "," +
-      o(r() * s) +
-      "," +
-      o(r() * s) +
-      "," +
-      r().toFixed(1) +
-      ")"
-    );
+    return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + "," + r().toFixed(1) + ")";
   };
 
   // Inserting fake data points into our dataset
